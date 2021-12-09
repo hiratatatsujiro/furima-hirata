@@ -1,12 +1,16 @@
 class OrdersController < ApplicationController
-  def index
-    @item = Item.find(params[:item_id])
-    @order_buyer = OrderBuyer.new
+  before_action :authenticate_user!
+  before_action :find_params, only: [:index, :create]
 
+
+  def index
+    @order_buyer = OrderBuyer.new
+    unless user_signed_in? && @order_buyer.user_id == current_user.id 
+      redirect_to root_path
+    end
   end
   
   def create
-    @item = Item.find(params[:item_id])
     @order_buyer = OrderBuyer.new(order_buyer_params)
     if @order_buyer.valid?
       pay_item
@@ -32,4 +36,9 @@ class OrdersController < ApplicationController
         currency: "jpy"
       )
   end
+
+  def find_params
+    @item = Item.find(params[:item_id]) 
+  end
+
 end
