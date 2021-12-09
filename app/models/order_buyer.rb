@@ -1,6 +1,6 @@
 class OrderBuyer
   include ActiveModel::Model
-  attr_accessor :postal_code, :delivery_area_id, :city, :house_number, :building, :phone_number, :user_id, :item_id
+  attr_accessor :token, :postal_code, :delivery_area_id, :city, :house_number, :building, :phone_number, :user_id, :item_id
 
   with_options presence: true do
     validates :postal_code
@@ -9,6 +9,7 @@ class OrderBuyer
     validates :phone_number
     validates :user_id
     validates :item_id
+    validates :token
   end
 
   validates :delivery_area_id, numericality: { other_than: 1, message: "can't be blank" }
