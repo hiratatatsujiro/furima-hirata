@@ -1,5 +1,6 @@
 function math(){
   const itemPrice = document.getElementById("item-price");
+  if (!itemPrice){ return false;};
   itemPrice.addEventListener("input", () => {
     const addTaxPrice = document.getElementById("add-tax-price");
     const pay = 0.1
