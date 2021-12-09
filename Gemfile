@@ -61,3 +61,5 @@ gem "image_processing"
 gem "pry-rails"
 
 gem "active_hash"
+
+gem "payjp"
