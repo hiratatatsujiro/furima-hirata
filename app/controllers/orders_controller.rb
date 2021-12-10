@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
   def index
     @order_buyer = OrderBuyer.new
     unless user_signed_in? && @order_buyer.user_id != current_user.id 
+
       redirect_to root_path
     end
   end

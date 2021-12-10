@@ -1,7 +1,10 @@
 class ItemsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show] 
+  before_action :find_params, only: [:edit, :update, :show, :destroy]
+  before_action :move_to_index, only: [:edit, :update, :destroy]
 
   def index
-    @items = Item.all
+    @items = Item.includes(:user)
   end
 
   def new
@@ -19,11 +22,11 @@ class ItemsController < ApplicationController
   end
 
   def edit
-   @item = Item.find(params[:id]) 
+  
   end
 
   def update
-   @item = Item.find(params[:id])
+   
    if @item.valid?
     @item.update(item_params)
     redirect_to item_path(@item)
@@ -33,17 +36,27 @@ class ItemsController < ApplicationController
   end
 
   def show
-   @item = Item.find(params[:id])
+   
   end
 
   def destroy
-   @item = Item.find(params[:id])
+   
    @item.destroy
    redirect_to root_path
   end
 
   private
   def item_params
-    params.requre(:item).permit(:name, :introduce, :category_id, :status_id, :pay_for_shipping_id, :delivery_area_id, :day_to_ship_id, :price).merge(user_id: current_user.id)
+    params.require(:item).permit(:image, :name, :introduce, :category_id, :status_id, :pay_for_shopping_id, :delivery_area_id, :day_to_ship_id, :price).merge(user_id: current_user.id)
+  end
+
+  def find_params
+    @item = Item.find(params[:id]) 
+  end
+
+  def move_to_index
+    unless user_signed_in? && @item.user_id == current_user.id 
+      redirect_to root_path
+    end
   end
 end
